@@ -1,0 +1,33 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+
+.disabled-card {
+    background-color: #f0f0f0; /* Light grey background */
+    pointer-events: none; /* Disable interactions with the card */
+  }
+  
+  .disabled-card .card-body {
+    color: #b0b0b0; /* Light grey color for text inside the card */
+  }
+  
+  .disabled-card .btn {
+    pointer-events: none; /* Disable button interactions */
+    opacity: 0.5; /* Make buttons appear disabled */
+    border-color: #d3d3d3; /* Light grey border for disabled buttons */
+  }
+  
+  .disabled-card .btn-outline-primary,
+  .disabled-card .btn-outline-danger {
+    color: #d3d3d3; /* Change button text color to light grey */
+  }
+  
+  .disabled-card .card-title,
+  .disabled-card .card-text {
+    color: #b0b0b0; /* Change text color to light grey */
+  }
+  
+
+  

@@ -1,25 +1,59 @@
-import logo from './logo.svg';
-import './App.css';
+import Choose from './components/Choose';
+import Home from './components/Home';
+import Navbar from './components/Navbar';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation
+} from "react-router-dom";
+import TeacherSignup from './components/TeacherSignup';
+import StudentSignup from './components/StudentSignup';
+import Studentpage from './components/Studentpage';
+import Login from './components/Login';
+import Teacherpage from './components/Teacherpage';
+import Alert from './components/Alert';
+import { useState } from 'react';
 
-function App() {
+function AppWrapper() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <App />
+    </Router>
   );
 }
 
-export default App;
+function App() {
+  const [alert, setAlert] = useState(null);
+  const location = useLocation(); 
+
+  const showAlert = (message, type) => {
+    setAlert({
+      msg: message,
+      type: type
+    });
+    setTimeout(() => {
+      setAlert(null)
+    }, 1000)
+  }
+
+  return (
+    <>
+      <Navbar />
+      {location.pathname !== '/' && <Alert alert={alert} />}
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/choose" element={<Choose />} />
+          <Route path="/teacher" element={<TeacherSignup />} />
+          <Route path="/student" element={<StudentSignup />} />
+          <Route path="/student-page" element={<Studentpage showAlert={showAlert} />} />
+          <Route path="/teacher-page" element={<Teacherpage  showAlert={showAlert}/>} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </div>
+    </>
+  );
+}
+
+export default AppWrapper;
