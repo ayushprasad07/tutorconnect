@@ -21,6 +21,23 @@ const Navbar = () => {
     ref.current.click();
   };
 
+  const getTeacher = async ()=>{
+    try {
+      const teacherId = localStorage.getItem('teacherid');
+      const URL = `http://localhost:4000/api/teachers/get/${teacherId}`;
+      const response = await fetch(URL,{
+        method:"POST",
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      })
+      const data = await response.json();
+      setUser(data.teacher);
+    } catch (error) {
+      console.log("Some error occured" , error);
+    }
+  }
+
   const getUser = async () => {
     const studentid = localStorage.getItem('studentid');
     if (!studentid) return;
@@ -50,8 +67,10 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isLoggedIn && localStorage.getItem('studentid')) {
       getUser();
+    }else if(isLoggedIn && localStorage.getItem('teacherid')){
+      getTeacher();
     } else {
       setUser({});
     }
