@@ -8,6 +8,7 @@ import flexible from '../images/flexibleSheduling.png'
 import pricing from '../images/transparentPricing.png'
 import support from '../images/support 2.png'
 import booking from '../images/becomeTutor.webp'
+import Footer from './Footer'
 
 const Home = () => {
   return (
@@ -132,12 +133,7 @@ const Home = () => {
   </div>
 </div>
 
-      <div className="footer card text-center border-0" style={{ background: "linear-gradient(to right, white, #e6f6fa 30%, #e6f6fa 70%, white)" }}>
-        <div className="card-body">
-          <h5 className="card-title">tutorConnect</h5>
-          <p className="card-text text-muted">For any query email: ayushprasad2110@gmail.com</p>
-        </div>
-      </div>
+    <Footer/>
     </>
   )
 }

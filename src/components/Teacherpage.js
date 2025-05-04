@@ -4,7 +4,9 @@ import './Teacherpage.css';
 import noBooking from '../images/noboookings.png'
 import Footer from './Footer';
 
+
 const Teacherpage = (props) => {
+  const [identity,setIdentity] = useState({});
   const [bookings, setBookings] = useState([]);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [choice, setChoice] = useState(null); 
@@ -63,6 +65,23 @@ const Teacherpage = (props) => {
     }
   };
 
+  const getTeacher = async ()=>{
+    try {
+      const teacherId = localStorage.getItem('teacherid');
+      const URL = `http://localhost:4000/api/teachers/get/${teacherId}`;
+      const response = await fetch(URL,{
+        method:"POST",
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      })
+      const data = await response.json();
+      setIdentity(data.teacher);
+    } catch (error) {
+      console.log("Some error occured" , error);
+    }
+  }
+
   const handleClick = (userChoice, booking) => {
     setSelectedBooking(booking);
     setChoice(userChoice);
@@ -79,11 +98,12 @@ const Teacherpage = (props) => {
 
   useEffect(() => {
     getBookings();
+    getTeacher();
   }, []);
 
   return (
-    <div className="page-container">
-      <div className="content-wrap">
+    <div>
+      <div className="content-wrap" style={{minHeight:"100vh"}}>
         <div className="container">
           <div className="row justify-content-center">
             {bookings.length === 0 && (
@@ -95,7 +115,12 @@ const Teacherpage = (props) => {
                   <h5 className="text-muted mt-3">No requests yet.</h5>
                 </div>
               )}
-
+              {bookings.length !==0 &&
+                <div>
+                  <h2>Welcome {identity.name},</h2>
+                  <h6>Here are bookings for you</h6>
+                </div>
+              }
             {bookings.map((booking) => (
               <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 p-3" key={booking._id}>
                 <div className={`card h-100 shadow-sm ${booking.status === 'cancelled' ? 'disabled-card' : ''}`}>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
+import logo from '../images/tutorConnect-logo.png'
 
 
 const Login = () => {
@@ -56,7 +57,14 @@ const Login = () => {
     }
       
   return (
-    <div className='card container p-3 my-3'>
+    <div className='container'>
+        <div className='card container p-3 my-3'>
+        <img 
+            src={logo} 
+            alt="TutorConnect Logo"
+            className="d-block mx-auto mb-3"
+            style={{ width: "150px", height: "auto" }} 
+            />
         <h1>Login : </h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -96,6 +104,7 @@ const Login = () => {
         </div>
         <button type="submit" className="btn btn-primary">login</button>
       </form>
+    </div>
     </div>
   )
 }

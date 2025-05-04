@@ -98,6 +98,20 @@ router.put('/accept/:bookingid', async (req, res) => {
     }
 });
 
+//ROUTE 5: get all teh bookings done by the student '/xgetbooking/:studentid'
+router.post('/getbooking/:studentid',async (req,res)=>{
+    try {
+        const studentId = req.params.studentid;
+        const student = await Student.findById(studentId);
+        if(!student){
+            return res.status(400).json({message:"Student not found",error:"Student not found"});
+        }
+        const booking  = await Booking.find({student:studentId}).populate('teacher','name subject');
+        res.status(200).json({message:"Booking fetched",booking});
+    } catch (error) {
+        return res.status(500).json({message : "Some error occured",error:"Internal Server error"})
+    }
+})
 
 
 

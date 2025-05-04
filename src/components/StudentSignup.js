@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import logo from '../images/tutorConnect-logo.png'
 
 const StudentSignup = () => {
   const [credentials,setCredentials] = useState({name:"",email:"",password:"",phoneNumber:"",location:"",fatherName:"",guardianNumber:""})
@@ -44,7 +45,14 @@ const StudentSignup = () => {
     setCredentials({...credentials,[e.target.name]:e.target.value});
   }
   return (
-    <div className='card container my-3 p-3'>
+    <div className='container'>
+      <div className='card container my-3 p-3'>
+      <img 
+            src={logo} 
+            alt="TutorConnect Logo"
+            className="d-block mx-auto mb-3"
+            style={{ width: "150px", height: "auto" }} 
+            />
       <form onSubmit={handleSubmit}>
         <h1>Sign up to continue</h1>
         <div className="mb-3">
@@ -78,6 +86,7 @@ const StudentSignup = () => {
         </div>
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>
+    </div>
     </div>
   )
 }

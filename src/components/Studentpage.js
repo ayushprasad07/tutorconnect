@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import image from '../images/defaultTeacher.jpg';
 import Footer from './Footer';
 
 const Studentpage = (props) => {
+  const [getBooking,setGetBooking] = useState([]);
   const [allTeachers, setAllTeachers] = useState([]);
   const [user, setUser] = useState({});
   const [bookingDateTime, setBookingDateTime] = useState(
@@ -39,6 +40,25 @@ const Studentpage = (props) => {
       setAllTeachers([]);
     }
   };
+
+  const getBookings = useCallback(async()=>{
+    const studentId = localStorage.getItem('studentid');
+    if(!studentId) return;
+    try {
+      const URL = `http://localhost:4000/api/bookings/getbooking/${studentId}`;
+      const response = await fetch(URL,{
+        method : "POST",
+        headers:{
+          'Content-Type': 'application/json',
+        }
+      });
+      const data = await response.json();
+      setGetBooking(data.booking);
+      console.log(getBooking)
+    } catch (error) {
+      console.log("Some error occured : ",error);
+    }
+  },[])
 
   const getUser = async () => {
     const studentid = localStorage.getItem('studentid');
@@ -97,7 +117,8 @@ const Studentpage = (props) => {
   useEffect(() => {
     getTeachers();
     getUser();
-  }, []);
+    getBookings();
+  }, [getBookings]);
 
   return (
     <div>
@@ -115,9 +136,30 @@ const Studentpage = (props) => {
           />
         </div>
 
-        {/* Tutors + Featured Section */}
         <div className="row">
-          {/* Tutors List */}
+          <div className="col-md-3 my-2">
+            <div className="card sticky-top" style={{ top: '80px' }}>
+              <div className="card-header">Your Bookings</div>
+              <div className="card-body">
+                {getBooking.length === 0 ? (
+                  <p className="card-text">No bookings yet.</p>
+                ) : (
+                  getBooking.map((booking) => (
+                    <div key={booking._id} className="mb-3 p-2 border rounded">
+                      <p><strong>Teacher:</strong> {booking.teacher?.name || 'N/A'}  
+                      {booking.status==='pending' && <span className="badge text-bg-warning mx-1">{booking.status}</span>}  
+                      {booking.status==='cancelled' && <span className="badge text-bg-danger mx-1">{booking.status}</span> }
+                      {booking.status==='confirmed' && <span className="badge text-bg-success mx-1">{booking.status}</span>}
+                      </p>
+                      <p><strong>Subject:</strong> {booking.teacher?.subject || 'N/A'}</p>
+                      <p><strong>Date:</strong> {new Date(booking.bookingDateTime).toLocaleDateString()}</p>
+                      <p><strong>Time:</strong> {new Date(booking.bookingDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
           <div className="col-md-9">
             <h3>Our Dedicated Tutors:</h3>
             <div className="row">
@@ -154,21 +196,9 @@ const Studentpage = (props) => {
               ))}
             </div>
           </div>
-          <div className="col-md-3">
-            <div className="card sticky-top" style={{ top: '80px' }}>
-              <div className="card-header">Your Bookings</div>
-              <div className="card-body">
-                <h5 className="card-title">Top-Rated Tutor</h5>
-                <p className="card-text">
-                  Handpicked tutor with excellent student feedback. Learn from the best!
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* Modal */}
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
@@ -207,7 +237,6 @@ const Studentpage = (props) => {
           </div>
         </div>
       </div>
-
       <Footer />
     </div>
   );

@@ -84,7 +84,7 @@ router.post("/login/teacher",[
     }
 })
 
-//ROUTER 3: get a teacher using: POST "/api/teachers/getteacher". Login required
+//ROUTER 3: get all teacher using: POST "/api/teachers/getteacher". Login required
 router.post('/getteacher', fetchUser, async (req, res) => {
     try {
         const teacher = await Teachers.find();
@@ -94,5 +94,19 @@ router.post('/getteacher', fetchUser, async (req, res) => {
         res.status(500).json({success:false, error: "Internal server error" });
     }
 });
+
+//ROUTER 4: get a teacher using POST: '/get/:teacherid';
+router.post('/get/:teacherid', async (req, res) => {
+    try {
+      const teacher = await Teachers.findById(req.params.teacherid);
+      if (!teacher) {
+        return res.status(400).json({ message: "Teacher not found", error: "Teacher not found" });
+      }
+      res.status(200).json({ teacher });
+    } catch (error) {
+      return res.status(500).json({ error: "Internal Server error" });
+    }
+  });
+  
 
 module.exports = router;

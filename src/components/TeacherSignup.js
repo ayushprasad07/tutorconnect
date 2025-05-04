@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import logo from '../images/tutorConnect-logo.png'
 
 const TeacherSignup = () => {
     const [credentials, setCredentials] = useState({
@@ -50,7 +51,14 @@ const TeacherSignup = () => {
     }
 
   return (
-    <div className='card container border-1 my-3 p-3'>
+    <div className='container'>
+        <div className='card container border-1 my-3 p-3'>
+        <img 
+            src={logo} 
+            alt="TutorConnect Logo"
+            className="d-block mx-auto mb-3"
+            style={{ width: "150px", height: "auto" }} 
+            />
         <h1>Sign up to Continue</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -87,6 +95,7 @@ const TeacherSignup = () => {
         </div>
         <button type="submit" className="btn btn-primary">Create Account</button>
       </form>
+    </div>
     </div>
   )
 }

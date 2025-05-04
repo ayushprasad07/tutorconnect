@@ -1,6 +1,7 @@
 import Choose from './components/Choose';
 import Home from './components/Home';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import {
   BrowserRouter as Router,
   Routes,
@@ -38,21 +39,22 @@ function App() {
   }
 
   return (
-    <>
+    <div className="page-container">
       <Navbar />
       {location.pathname !== '/' && <Alert alert={alert} />}
-      <div className="container">
+      
+      <div className="content-wrap">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/choose" element={<Choose />} />
           <Route path="/teacher" element={<TeacherSignup />} />
           <Route path="/student" element={<StudentSignup />} />
           <Route path="/student-page" element={<Studentpage showAlert={showAlert} />} />
-          <Route path="/teacher-page" element={<Teacherpage  showAlert={showAlert}/>} />
+          <Route path="/teacher-page" element={<Teacherpage showAlert={showAlert} />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </div>
-    </>
+    </div>
   );
 }
 

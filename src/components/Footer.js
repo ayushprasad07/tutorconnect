@@ -3,10 +3,10 @@ import React from 'react'
 const Footer = () => {
   return (
     <div>
-      <div class="card border-0" style={{width:"100%",background: "linear-gradient(to right, white, #e6f6fa 30%, #e6f6fa 70%, white)"}}>
-        <div class="card-body text-center">
+      <div className="card border-0" style={{width:"100%",background: "#050A30", color:"white",borderRadius:'0'}}>
+        <div className="card-body text-center">
           <p>tutorConnect</p>
-          <p className='text-muted'>For any query emial  : prasadayush567@gmail.com</p>
+          <p className='text-light'>For any query emial  : prasadayush567@gmail.com</p>
         </div>
       </div>
     </div>
