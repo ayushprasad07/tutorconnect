@@ -137,10 +137,13 @@ const Studentpage = (props) => {
         </div>
 
         <div className="row">
-          <div className="col-md-3 my-2">
+          <div className="col-md-4 my-2">
             <div className="card sticky-top" style={{ top: '80px' }}>
               <div className="card-header">Your Bookings</div>
-              <div className="card-body">
+              <div className="card-body" style={{
+                maxHeight: getBooking.length > 4 ? '300px' : 'auto',
+                overflowY: getBooking.length > 4 ? 'auto' : 'visible',
+              }}>
                 {getBooking.length === 0 ? (
                   <p className="card-text">No bookings yet.</p>
                 ) : (
@@ -160,7 +163,7 @@ const Studentpage = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-md-9">
+          <div className="col-md-8">
             <h3>Our Dedicated Tutors:</h3>
             <div className="row">
               {allTeachers.map((teacher) => (

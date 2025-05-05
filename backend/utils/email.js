@@ -9,14 +9,14 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-const sendConfirmationEmail = (studentEmail, studentName, teacherName, date) => {
+const sendConfirmationEmail = (studentEmail, studentName, teacherName,subject, date) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: studentEmail,
       subject: 'Booking Confirmed!',
       html: `
         <h3>Hello ${studentName},</h3>
-        <p>Your booking with <strong>${teacherName}</strong> on <strong>${date}</strong> has been confirmed.</p>
+        <p>Your booking with <strong>${teacherName}</strong> on <strong>${date}</strong> for <strong> ${subject} </strong> has been confirmed.</p>
         <p>Thank you for using TutorConnect!</p>
       `,
     }

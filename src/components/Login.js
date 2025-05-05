@@ -4,7 +4,7 @@ import {jwtDecode} from 'jwt-decode';
 import logo from '../images/tutorConnect-logo.png'
 
 
-const Login = () => {
+const Login = (props) => {
     const [role, setRole] = useState("");
     const [credentials,setCredentials] = useState({email:"",password:""});
 
@@ -34,12 +34,15 @@ const Login = () => {
                 if(role==="student"){
                     localStorage.setItem('studentid',decodedToken.student.id);
                     navigator('/student-page');
+                    props.showAlert(json.message,"success");
                 }else{
                     localStorage.setItem('teacherid',decodedToken.teacher.id);
                     navigator('/teacher-page');
+                    props.showAlert(json.message,"success");
                 }
             }else{
                 console.log("Have some issues");
+                props.showAlert(json.message,"danger")
             }
         } catch (error) {
             console.log("Some error occured : ",error);

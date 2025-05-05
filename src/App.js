@@ -50,7 +50,7 @@ function App() {
           <Route path="/student" element={<StudentSignup />} />
           <Route path="/student-page" element={<Studentpage showAlert={showAlert} />} />
           <Route path="/teacher-page" element={<Teacherpage showAlert={showAlert} />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login showAlert={showAlert}/>} />
         </Routes>
       </div>
     </div>

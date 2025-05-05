@@ -61,7 +61,7 @@ router.put('/cancel/:bookingid',async(req,res)=>{
 //ROUTE 5: accept the booking by the tutor '/accept/:bookingid';
 router.put('/accept/:bookingid', async (req, res) => {
     try {
-        const booking = await Booking.findById(req.params.bookingid);
+        const booking = await Booking.findById(req.params.bookingid).populate('teacher');
 
         if (!booking) {
             return res.status(400).json({ message: "Booking not found" });
@@ -88,6 +88,7 @@ router.put('/accept/:bookingid', async (req, res) => {
             student.email,
             student.name,
             teacher.name,
+            booking.teacher.subject,
             formattedDate
         );
 
@@ -112,6 +113,22 @@ router.post('/getbooking/:studentid',async (req,res)=>{
         return res.status(500).json({message : "Some error occured",error:"Internal Server error"})
     }
 })
+
+// ROUTE 6 : Get all the bookings done by the teacher '/getbooking/:teacherid'
+router.post('/getbooking/teacher/:teacherid', async (req, res) => {
+    try {
+        const teacherId = req.params.teacherid;
+        const teacher =  await Teachers.findById(teacherId);
+        if(!teacher){
+            return res.status(400).json({message:"Teacher not found",error:"Teacher was not found"});
+        }
+        const bookings = await Booking.find({ teacher: teacherId }).populate('student');
+        res.status(200).json({ message: "Teacher bookings fetched", bookings });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Some internal error occurred", error: error.message });
+    }
+});
 
 
 

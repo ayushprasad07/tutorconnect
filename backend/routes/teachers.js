@@ -65,11 +65,11 @@ router.post("/login/teacher",[
         const teacher = await Teachers.findOne({email});
         let success = false;
         if(!teacher){
-            return res.status(400).json({success,error:"Please login in with correct credentials"});
+            return res.status(400).json({message:"Login in with correct credentials",success,error:"Please login in with correct credentials"});
         }
         const passCompare = await bcrypt.compare(password,teacher.password);
         if(!passCompare){
-            return res.status(400).json({error:"Please try to login with corrrect credentials"});
+            return res.status(400).json({message:"Login in with correct credentials",error:"Please try to login with corrrect credentials"});
         }
         const data = {
             teacher:{
@@ -78,9 +78,9 @@ router.post("/login/teacher",[
         }
         const authToken = jwt.sign(data, process.env.JWT_SECRET);
         success = true
-        res.json({success,teacher,authToken});
+        res.json({message:"Logged in successfully",success,teacher,authToken});
     } catch (error) {
-        return res.status(500).json({success:false,error:"Sorry! internal error occured"});
+        return res.status(500).json({message:"Some internal error occured",success:false,error:"Sorry! internal error occured"});
     }
 })
 

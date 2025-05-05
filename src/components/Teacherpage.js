@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import image from '../images/defaultStudent.png';
 import './Teacherpage.css';
-import noBooking from '../images/noboookings.png'
+import noBooking from '../images/noboookings.png';
 import Footer from './Footer';
 
-
 const Teacherpage = (props) => {
-  const [identity,setIdentity] = useState({});
+  const [identity, setIdentity] = useState({});
   const [bookings, setBookings] = useState([]);
   const [selectedBooking, setSelectedBooking] = useState(null);
-  const [choice, setChoice] = useState(null); 
+  const [choice, setChoice] = useState(null);
+  const [teacherBooking, setTeacherBooking] = useState([]);
   const ref = useRef(null);
 
   const getBookings = async () => {
@@ -57,7 +57,7 @@ const Teacherpage = (props) => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         getBookings();
       }
     } catch (error) {
@@ -65,27 +65,46 @@ const Teacherpage = (props) => {
     }
   };
 
-  const getTeacher = async ()=>{
+  const getTeacherBooking = async () => {
+    try {
+      const teacherId = localStorage.getItem('teacherid');
+      const URL = `http://localhost:4000/api/bookings/getbooking/teacher/${teacherId}`;
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setTeacherBooking(data.bookings);
+      }
+    } catch (error) {
+      console.log("Some error occurred: ", error);
+    }
+  };
+
+  const getTeacher = async () => {
     try {
       const teacherId = localStorage.getItem('teacherid');
       const URL = `http://localhost:4000/api/teachers/get/${teacherId}`;
-      const response = await fetch(URL,{
-        method:"POST",
-        headers:{
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
           'Content-Type': 'application/json'
         }
-      })
+      });
       const data = await response.json();
       setIdentity(data.teacher);
     } catch (error) {
-      console.log("Some error occured" , error);
+      console.log("Some error occurred", error);
     }
-  }
+  };
 
   const handleClick = (userChoice, booking) => {
     setSelectedBooking(booking);
     setChoice(userChoice);
-    ref.current.click(); 
+    ref.current.click();
   };
 
   const handleModalConfirm = () => {
@@ -99,76 +118,104 @@ const Teacherpage = (props) => {
   useEffect(() => {
     getBookings();
     getTeacher();
+    getTeacherBooking();
   }, []);
 
   return (
     <div>
-      <div className="content-wrap" style={{minHeight:"100vh"}}>
+      <div className="content-wrap" style={{ minHeight: "100vh" }}>
         <div className="container">
-          <div className="row justify-content-center">
-            {bookings.length === 0 && (
-              
-                <div className="d-flex justify-content-center align-items-center vh-100 flex-column">
-                  <div className="card border-0" style={{ width: "18rem" }}>
-                    <img src={noBooking} className="card-img-top" alt="No Bookings" />
-                  </div>
-                  <h5 className="text-muted mt-3">No requests yet.</h5>
-                </div>
-              )}
-              {bookings.length !==0 &&
-                <div>
-                  <h2>Welcome {identity.name},</h2>
-                  <h6>Here are bookings for you</h6>
-                </div>
-              }
-            {bookings.map((booking) => (
-              <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 p-3" key={booking._id}>
-                <div className={`card h-100 shadow-sm ${booking.status === 'cancelled' ? 'disabled-card' : ''}`}>
-                  <img
-                    src={image}
-                    className="card-img-top rounded-circle mx-auto d-block mt-3"
-                    alt="Student"
-                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{booking.student.name}</h5>
-                    <p className="card-text"><strong>Location:</strong> {booking.student.location}</p>
-                    <p className="card-text"><strong>Status:</strong> {booking.status}</p>
-                    <p className="card-text"><strong>Booking Date:</strong> {booking.bookingDateTime.slice(0, 10)}</p>
-                    <div>
-                      {(booking.status === 'pending' || booking.status === 'confirmed') && (
-                        <button
-                          type="button"
-                          className="btn btn-outline-primary my-2 mx-2"
-                          onClick={() => handleClick("Accept", booking)}
-                          disabled={booking.status === 'cancelled' || booking.status === 'confirmed'}
-                        >
-                          {booking.status === 'confirmed' ? "Accepted" : "Accept"}
-                        </button>
-                      )}
-                      {booking.status === 'pending' && (
-                        <button
-                          type="button"
-                          className="btn btn-outline-danger my-2 mx-2"
-                          onClick={() => handleClick("Reject", booking)}
-                          disabled={booking.status === 'cancelled' || booking.status === 'confirmed'}
-                        >
-                          Reject
-                        </button>
-                      )}
-                    </div>
+            <div>
+              <h2>Welcome {identity.name},</h2>
+              <p className="text-muted fst-italic">"Teaching is the one profession that creates all other professions."</p>
+            </div>
+          {bookings.length === 0 && (
+            <div className="d-flex justify-content-center align-items-center vh-100 flex-column">
+              <div className="card border-0" style={{ width: "18rem" }}>
+                <img src={noBooking} className="card-img-top" alt="No Bookings" />
+              </div>
+            </div>
+          )}
+          <div className="row">
+            {teacherBooking.length !==0 && 
+              <div className="col-md-4 my-2">
+                <div className="card sticky-top" style={{ top: '80px' }}>
+                  <div className="card-header">Your Bookings</div>
+                  <div className="card-body"  style={{
+                    maxHeight: teacherBooking.length > 4 ? '300px' : 'auto',
+                    overflowY: teacherBooking.length > 4 ? 'auto' : 'visible',
+                  }}>
+                    {teacherBooking.length === 0 ? (
+                      <p className="card-text">No bookings yet.</p>
+                    ) : (
+                      teacherBooking.map((booking) => (
+                        <div key={booking._id} className="mb-3 p-2 border rounded">
+                          <p><strong>Student:</strong> {booking.student?.name || 'N/A'}
+                            {booking.status === 'pending' && <span className="badge text-bg-warning mx-1">{booking.status}</span>}
+                            {booking.status === 'cancelled' && <span className="badge text-bg-danger mx-1">{booking.status}</span>}
+                            {booking.status === 'confirmed' && <span className="badge text-bg-success mx-1">{booking.status}</span>}
+                          </p>
+                          <p><strong>Date:</strong> {new Date(booking.bookingDateTime).toLocaleDateString()}</p>
+                          <p><strong>Time:</strong> {new Date(booking.bookingDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
               </div>
-            ))}
+            }
+
+            <div className="col-md-8">
+              <div className="row">
+                {bookings.map((booking) => (
+                  <div className="col-12 col-sm-6 col-lg-6 mb-4 p-3" key={booking._id}>
+                    <div className={`card h-100 shadow-sm ${booking.status === 'cancelled' ? 'disabled-card' : ''}`}>
+                      <img
+                        src={image}
+                        className="card-img-top rounded-circle mx-auto d-block mt-3"
+                        alt="Student"
+                        style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                      />
+                      <div className="card-body">
+                        <h5 className="card-title">{booking.student.name}</h5>
+                        <p className="card-text"><strong>Location:</strong> {booking.student.location}</p>
+                        <p className="card-text"><strong>Status:</strong> {booking.status}</p>
+                        <p className="card-text"><strong>Booking Date:</strong> {booking.bookingDateTime.slice(0, 10)}</p>
+                        <div>
+                          {(booking.status === 'pending' || booking.status === 'confirmed') && (
+                            <button
+                              type="button"
+                              className="btn btn-outline-primary my-2 mx-2"
+                              onClick={() => handleClick("Accept", booking)}
+                              disabled={booking.status === 'cancelled' || booking.status === 'confirmed'}
+                            >
+                              {booking.status === 'confirmed' ? "Accepted" : "Accept"}
+                            </button>
+                          )}
+                          {booking.status === 'pending' && (
+                            <button
+                              type="button"
+                              className="btn btn-outline-danger my-2 mx-2"
+                              onClick={() => handleClick("Reject", booking)}
+                              disabled={booking.status === 'cancelled' || booking.status === 'confirmed'}
+                            >
+                              Reject
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           <button type="button" className="btn btn-primary d-none" ref={ref} data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Launch demo modal
+            Launch modal
           </button>
-
           <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div className="modal-dialog">
+            <div className="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
               <div className="modal-content">
                 <div className="modal-header">
                   <h1 className="modal-title fs-5" id="exampleModalLabel">Confirmation</h1>
@@ -176,15 +223,24 @@ const Teacherpage = (props) => {
                 </div>
                 <div className="modal-body">
                   {selectedBooking ? (
-                    <>
-                      <h4>Do you want to {choice?.toLowerCase()} the booking for:</h4>
-                      <div className="mt-2">
-                        <h5 className="card-title">{selectedBooking.student.name}</h5>
-                        <p className="card-text"><strong>Location:</strong> {selectedBooking.student.location}</p>
-                        <p className="card-text"><strong>Status:</strong> {selectedBooking.status}</p>
-                        <p className="card-text"><strong>Booking Date:</strong> {selectedBooking.bookingDateTime.slice(0, 10)}</p>
+                    <div className="row align-items-center">
+                      <div className="col-12 col-md-4 text-center mb-3">
+                        <img
+                          src={image}
+                          alt="Student"
+                          className="rounded-circle img-fluid"
+                          style={{ maxWidth: '100px', height: '100px', objectFit: 'cover' }}
+                        />
                       </div>
-                    </>
+                      <div className="col-12 col-md-8">
+                        <h4>Do you want to {choice?.toLowerCase()} the booking for:</h4>
+                        <h5 className="mt-2">{selectedBooking.student.name}</h5>
+                        <p><strong>Location:</strong> {selectedBooking.student.location}</p>
+                        <p><strong>Status:</strong> {selectedBooking.status}</p>
+                        <p><strong>Booking Date:</strong> {new Date(selectedBooking.bookingDateTime).toLocaleDateString()}</p>
+                        <p><strong>Time:</strong> {new Date(selectedBooking.bookingDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                      </div>
+                    </div>
                   ) : (
                     <p>No booking selected</p>
                   )}
@@ -205,7 +261,7 @@ const Teacherpage = (props) => {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

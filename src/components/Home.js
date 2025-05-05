@@ -35,47 +35,53 @@ const Home = () => {
       </div>
     </div>
     <div className="card text-center border-0">
-        <div className="card-body">
-            <h1 className="card-title">How it Works</h1>
-            <div className='container my-5'>
-                <div className='row justify-content-center'>
-                <div className="col-md-4 d-flex justify-content-center mb-4">
-                    <div className="card text-center border-0" style={{ width: "18rem" }}>
-                        <img src={search} className="card-img-top" alt="..." />
-                        <div className="card-body">
-                        <h5 className="card-title">Search and filter tutors</h5>
-                        <p className="card-text">
-                            Search tutors by subject and location.
-                        </p>
-                        </div>
-                    </div>
+      <div className="card-body">
+        <h1 className="card-title">How it Works</h1>
+        <div className="container my-5">
+          <div className="row g-4 justify-content-center">
+            {/* Card 1 */}
+            <div className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
+              <div className="card text-center border-0" style={{ maxWidth: "18rem" }}>
+                <img src={search} className="card-img-top" alt="Search tutors" />
+                <div className="card-body">
+                  <h5 className="card-title">Search and filter tutors</h5>
+                  <p className="card-text">
+                    Search tutors by subject and location.
+                  </p>
                 </div>
-                <div className="col-md-4 d-flex justify-content-center mb-4">
-                    <div className="card text-center border-0" style={{ width: "18rem" }}>
-                        <img src={aval} className="card-img-top" alt="..." />
-                        <div className="card-body">
-                        <h5 className="card-title">Check Availibility and fees</h5>
-                        <p className="card-text">
-                            View the availability of the tutor and fees per hour.
-                        </p>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-4 d-flex justify-content-center mb-4">
-                    <div className="card text-center border-0" style={{ width: "18rem" }}>
-                        <img src={learning} className="card-img-top" alt="..." />
-                        <div className="card-body">
-                        <h5 className="card-title">Book and Start Learning</h5>
-                        <p className="card-text">
-                            Schedule lessons, with your choosen tutor.
-                        </p>
-                        </div>
-                    </div>
-                </div>
-                </div>
+              </div>
             </div>
+
+            {/* Card 2 */}
+            <div className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
+              <div className="card text-center border-0" style={{ maxWidth: "18rem" }}>
+                <img src={aval} className="card-img-top" alt="Check availability" />
+                <div className="card-body">
+                  <h5 className="card-title">Check Availability and Fees</h5>
+                  <p className="card-text">
+                    View the availability of the tutor and fees per hour.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
+              <div className="card text-center border-0" style={{ maxWidth: "18rem" }}>
+                <img src={learning} className="card-img-top" alt="Start learning" />
+                <div className="card-body">
+                  <h5 className="card-title">Book and Start Learning</h5>
+                  <p className="card-text">
+                    Schedule lessons with your chosen tutor.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+
     <div className="container text-center py-5">
         <h1 className="mb-5">Why choose tutorConnect?</h1>
         <div className="row g-4">
