@@ -9,17 +9,17 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-const sendConfirmationEmail = (studentEmail, studentName, teacherName,subject, date) => {
+const sendTeacherConfirmationEmail = (teacherEmail, studentName, teacherName,subject, date) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: studentEmail,
-      subject: 'Booking Confirmed!',
+      to: teacherEmail,
+      subject: 'A booking request for you!',
       html: `
-        <h2 style="color:#2c3e50;">Hello ${studentName},</h2>
+        <h2 style="color:#2c3e50;">Hello ${teacherName},</h2>
 
         <p style="font-size:16px; color:#34495e;">
-            Great news! Your booking with <strong>${teacherName}</strong> has been 
-            <span style="color:#27ae60;"><strong>confirmed</strong></span>.
+            You have received a new <strong style="color:#27ae60;">booking request</strong> from 
+            <strong>${studentName}</strong>.
         </p>
 
         <p style="font-size:16px; color:#34495e;">
@@ -28,11 +28,11 @@ const sendConfirmationEmail = (studentEmail, studentName, teacherName,subject, d
         </p>
 
         <p style="font-size:16px; color:#34495e;">
-            Please make sure to be available at the scheduled time. You can view more details and manage your bookings in your TutorConnect dashboard.
+            Please log in to your TutorConnect dashboard to <strong>confirm</strong> or <strong>decline</strong> this request.
         </p>
 
         <p style="font-size:16px; color:#7f8c8d;">
-            Thank you for choosing <strong>TutorConnect</strong> — we wish you a productive learning session!
+            Thank you for being a part of <strong>TutorConnect</strong>!
         </p>
 
         <p style="font-size:14px; color:#bdc3c7;">
@@ -44,4 +44,4 @@ const sendConfirmationEmail = (studentEmail, studentName, teacherName,subject, d
     return transporter.sendMail(mailOptions)
 };
 
-module.exports = {sendConfirmationEmail};
+module.exports = {sendTeacherConfirmationEmail};

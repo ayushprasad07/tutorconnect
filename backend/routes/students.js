@@ -90,4 +90,24 @@ router.post('/:studentid',async (req,res)=>{
     }
 })
 
+//ROUTE 4: update a student profile '/update/:studentid'
+router.put('/update/:studentid',async(req,res)=>{
+    try {
+        const {name,location,phoneNumber} = req.body;
+        const studentId = req.params.studentid;
+        const student = await Students.findById(studentId);
+        if(!student){
+            return res.status(400).json({message:"Student was not found"});
+        }
+        student.name = name || student.name;
+        student.location = location || student.location;
+        student.phoneNumber = phoneNumber || student.phoneNumber;
+
+        await student.save();
+        res.status(200).json({message:"Updated Successfully",student});
+    } catch (error) {
+        return res.status(500).json({message:"Internal Servre Error"})
+    }
+})
+
 module.exports = router;

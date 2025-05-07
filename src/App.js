@@ -12,8 +12,10 @@ import StudentSignup from './components/StudentSignup';
 import Studentpage from './components/Studentpage';
 import Login from './components/Login';
 import Teacherpage from './components/Teacherpage';
-import Alert from './components/Alert';
+// import Alert from './components/Alert';
 import { useState } from 'react';
+// import { OutlinedInput } from '@mui/material';
+import OutlinedAlerts from './components/OutlinedAlerts';
 
 function AppWrapper() {
   return (
@@ -40,8 +42,8 @@ function App() {
   return (
     <div className="page-container">
       <Navbar />
-      {location.pathname !== '/' && <Alert alert={alert} />}
-      
+      {/* {location.pathname !== '/' && <Alert alert={alert} />} */}
+      {location.pathname !== '/' && <OutlinedAlerts alert={alert} />}
       <div className="content-wrap">
         <Routes>
           <Route path="/" element={<Home />} />

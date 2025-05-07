@@ -4,15 +4,34 @@ const { sendConfirmationEmail } = require('../utils/email');
 const Booking = require('../models/Bookings');
 const Teachers = require('../models/Teachers');
 const Student = require('../models/Student');
+const {sendTeacherConfirmationEmail} = require('../utils/teacherEmail');
 
 //ROUTE 1: get the booking done by the student '/' ;
+// teacherEmail, studentName, teacherName,subject, date
 router.post('/',async(req,res)=>{
     try {
         const {teacherId,studentId,bookingDateTime} = req.body;
         console.log("Booking POST called with body:", req.body);
         const booking = await  Booking.create({teacher:teacherId,student:studentId,bookingDateTime:bookingDateTime});
         // await booking.save();
-        res.json({message:"Booking request sent",booking});
+        const student = await Student.findById(booking.student);
+        const teacher = await Teachers.findById(booking.teacher);
+        if(!student || !teacher){
+            return res.status(400).json({message:"Not found",error:"Not found"})
+        }
+        const formattedDate = new Date(booking.bookingDateTime).toLocaleString('en-IN', {
+            dateStyle: 'medium',
+            timeStyle: 'short',
+            timeZone: 'Asia/Kolkata'
+        });
+        sendTeacherConfirmationEmail(
+            teacher.email,
+            student.name,
+            teacher.name,
+            teacher.subject,
+            formattedDate
+        );
+        res.json({message:"Booking request sent and mail sent",booking});
     } catch (error) {
         console.log(error);
         return res.status(501).json({error: "Internal server error"});

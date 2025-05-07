@@ -203,7 +203,7 @@ const Studentpage = (props) => {
       </div>
 
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog">
+        <div className="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">Confirmation</h1>
@@ -211,35 +211,34 @@ const Studentpage = (props) => {
             </div>
             <div className="modal-body">
               {selectedTeacher ? (
-                <>
-                  <h4>Do you want to confirm the booking for:</h4>
-                  <h5 className="card-title">{selectedTeacher.name}</h5>
-                  <h6 className="card-subtitle mb-2 text-muted">{selectedTeacher.subject}</h6>
-                  <p className="card-text"><strong>Fees:</strong> ₹{selectedTeacher.chargesPerHour}</p>
-                  <p className="card-text"><strong>Location:</strong> {selectedTeacher.location}</p>
-                  <p className="card-text"><strong>Available:</strong> {selectedTeacher.availability}</p>
-                  <p className="card-text">{selectedTeacher.bio}</p>
-                  <p><strong>Booking Date:</strong> {bookingDateTime.slice(0, 10)}</p>
-                  <p><strong>Booking Time:</strong> {bookingDateTime.slice(11)}</p>
-                </>
+                <div className="row align-items-center">
+                  <div className="col-12 col-md-4 text-center mb-3">
+                    <img src={image} alt="Teacher" className="rounded-circle img-fluid" style={{ maxWidth: '100px', height: '100px', objectFit: 'cover' }} />
+                  </div>
+                  <div className="col-12 col-md-8">
+                    <h4>Do you want to confirm the booking for:</h4>
+                    <h5 className="mt-2">{selectedTeacher.name}</h5>
+                    <p><strong>Subject:</strong> {selectedTeacher.subject}</p>
+                    <p><strong>Fees:</strong> ₹{selectedTeacher.chargesPerHour}</p>
+                    <p><strong>Location:</strong> {selectedTeacher.location}</p>
+                    <p><strong>Availability:</strong> {selectedTeacher.availability}</p>
+                    <p><strong>Bio:</strong> {selectedTeacher.bio}</p>
+                    <p><strong>Booking Date:</strong> {bookingDateTime.slice(0, 10)}</p>
+                    <p><strong>Booking Time:</strong> {bookingDateTime.slice(11)}</p>
+                  </div>
+                </div>
               ) : (
                 <p>No teacher selected.</p>
               )}
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => selectedTeacher && handleClick(selectedTeacher._id)}
-                data-bs-dismiss="modal"
-              >
-                Confirm
-              </button>
+              <button type="button" className="btn btn-primary" onClick={() => selectedTeacher && handleClick(selectedTeacher._id)} data-bs-dismiss="modal">Confirm</button>
             </div>
           </div>
         </div>
       </div>
+
       <Footer />
     </div>
   );

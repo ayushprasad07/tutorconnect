@@ -107,6 +107,29 @@ router.post('/get/:teacherid', async (req, res) => {
       return res.status(500).json({ error: "Internal Server error" });
     }
   });
+
+// ROUTE 5  : edit a teachers profile '/teacher/editprofile/:teacherid'
+router.put('/teacher/editprofile/:teacherid',async(req,res)=>{
+    try {
+        const {name,bio,location,chargesPerHour,phoneNumber} = req.body;
+        const teacherid = req.params.teacherid;
+        const teacher = await Teachers.findById(teacherid);
+        if(!teacher){
+            return res.status(400).json({message:"teacher not found"});
+        }
+
+        teacher.name = name || teacher.name;
+        teacher.bio = bio || teacher.bio;
+        teacher.location = location || teacher.location;
+        teacher.chargesPerHour = chargesPerHour || teacher.chargesPerHour;
+        teacher.phoneNumber = phoneNumber || teacher.phoneNumber;
+
+        await teacher.save();
+        return res.status(200).json({message:"Successfully updated",teacher});
+    } catch (error) {
+        return res.status(500).json({message:"Some Internal error Occured"})
+    }
+})
   
 
 module.exports = router;
