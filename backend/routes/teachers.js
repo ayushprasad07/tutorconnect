@@ -5,15 +5,14 @@ const Teachers = require('../models/Teachers');
 const bcrypt = require('bcryptjs');
 require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
 var jwt = require('jsonwebtoken');
-const fetchUser = require('../middleware/fetchUser')
+const fetchUser = require('../middleware/fetchUser');
+const {upload} = require('../middleware/multer.middleware');
+const {uploadOnCloud} = require('../utils/cloudinary');
+const fs = require('fs');
 
 
 // ROUTE 1: register a teacher using: POST "/api/teachers/register/teacher". No login required
-router.post("/register/teacher", [
-    body('name',"Enter a valid name").isLength({min:3}),
-    body('email','Enter a valid email').isEmail(),
-    body('password', 'Enter a vlaid password').isLength({ min : 5 }),
-],async(req,res)=>{
+router.post("/register/teacher", upload.single('teacherImage'),async(req,res)=>{
     const result = validationResult(req);
     if(!result.isEmpty()){
         return res.status(400).json({error:result.array()});
@@ -24,10 +23,21 @@ router.post("/register/teacher", [
         if(teacher){
             return res.status(400).json({success,error:"Sorry this email already exists."});
         }
+        
         const salt = await bcrypt.genSalt(10);
         const hashPass = await bcrypt.hash(req.body.password,salt);
+
+        const localFilePath = req.file.path;
+        const teacherImageUpload = await uploadOnCloud(localFilePath);
+        fs.unlinkSync(localFilePath);
+
+        if(!teacherImageUpload){
+            return res.status(500).json({success:false,message:"Image was not upladed"});
+        }
+
         teacher = await Teachers.create({
             name:req.body.name,
+            teacherImage:teacherImageUpload.secure_url,
             email:req.body.email,
             password:hashPass,
             phoneNumber:req.body.phoneNumber,

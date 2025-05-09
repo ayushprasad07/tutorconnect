@@ -1,6 +1,6 @@
 const connectToMongo = require("./db");
 const express = require('express')
-var cors = require('cors')
+var cors = require('cors');
 
 connectToMongo()
 const app = express()
@@ -13,6 +13,7 @@ app.use(express.json());
 app.use('/api/teachers', require('./routes/teachers'));
 app.use('/api/students', require('./routes/students'));
 app.use('/api/bookings', require('./routes/bookings'));
+app.use('/api/upload', require('./routes/upload.js'));
 
 app.listen(port, () => {
   console.log(`Example app listening on http://localhost:${port}`)
