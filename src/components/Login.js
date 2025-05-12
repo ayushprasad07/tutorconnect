@@ -66,7 +66,7 @@ const Login = (props) => {
       
   return (
     <div className='container'>
-        <div className='card container p-3 my-3'>
+        <div className='card p-3 my-3 mx-auto login-card' style={{width:"100%", maxWidth:"500px", boxShadow:"0px 0px 60px #7fcaf0"}}>
         <img 
             src={logo} 
             alt="TutorConnect Logo"

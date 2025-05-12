@@ -11,7 +11,7 @@ const StudentSignup = (props) => {
 
   const handleSubmit = async(e)=>{
     e.preventDefault();
-    props.setProgress(0);
+    props.setProgress(20);
     const {name,email,password,phoneNumber,location,fatherName,guardianNumber} = credentials;
     const formData = new FormData();
     formData.append('name',name);
@@ -59,7 +59,7 @@ const StudentSignup = (props) => {
 
   return (
     <div className='container'>
-      <div className='card container my-3 p-3'>
+      <div className='card container my-3 p-3' style={{width:"100%", maxWidth:"500px", boxShadow:"0px 0px 60px #7fcaf0"}}>
       <img 
             src={logo} 
             alt="TutorConnect Logo"
