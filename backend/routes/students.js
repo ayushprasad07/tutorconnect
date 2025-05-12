@@ -5,9 +5,12 @@ const bcrypt = require('bcryptjs');
 require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
 const jwt = require('jsonwebtoken');
 const {body, validationResult} = require('express-validator');
+const {upload} = require('../middleware/multer.middleware');
+const {uploadOnCloud} = require("../utils/cloudinary");
+const fs = require('fs');
 
 // ROUTE 1: register a student using: POST "/api/students/register/student". No login required
-router.post("/register/student",[
+router.post("/register/student",upload.single('studentImage'),[
     body('name',"Enter a valid name").isLength({min:3}),
     body('email','Enter a valid email').isEmail(),
     body('password', 'Enter a vlaid password').isLength({ min : 5 }),
@@ -22,10 +25,21 @@ router.post("/register/student",[
         if(student){
             return res.status(400).json({success,error:"Sorry this email already exists"});
         }
+
         const salt = await bcrypt.genSalt(10);
         const hashPass = await bcrypt.hash(req.body.password,salt);
+
+        const localFilePath = req.file.path;
+        const studentUploadImage = await uploadOnCloud(localFilePath);
+        fs.unlinkSync(localFilePath);
+
+        if(!studentUploadImage){
+            return res.status(500).json({message:"Image was not uploaded"});
+        }
+
         student = await Students.create({
             name:req.body.name,
+            studentImage:studentUploadImage.secure_url,
             email:req.body.email,
             password:hashPass,
             phoneNumber:req.body.phoneNumber,
@@ -40,7 +54,7 @@ router.post("/register/student",[
         }
         const authToken = jwt.sign(data, process.env.JWT_SECRET);
         success = true;
-        res.json({success,student,authToken});
+        res.json({success,message:"Account Created Successfully",student,authToken});
     } catch (error) {
         console.error("Registration error:", error);  
         return res.status(500).json({error:"Internal Server error"});

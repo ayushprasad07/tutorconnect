@@ -11,7 +11,7 @@ export default function OutlinedAlerts(props) {
   };
 
   return (
-    <div style={{ height: '50px', marginBottom: '10px' }}>
+    <div style={{ height: '50px', marginBottom: '10px',marginTop:"70px" }}>
       <Fade in={!!props.alert} timeout={300}>
         <div style={{ height: '100%' }}>
           {props.alert && (

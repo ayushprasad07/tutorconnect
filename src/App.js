@@ -12,10 +12,9 @@ import StudentSignup from './components/StudentSignup';
 import Studentpage from './components/Studentpage';
 import Login from './components/Login';
 import Teacherpage from './components/Teacherpage';
-// import Alert from './components/Alert';
 import { useState } from 'react';
-// import { OutlinedInput } from '@mui/material';
 import OutlinedAlerts from './components/OutlinedAlerts';
+import LoadingBar from "react-top-loading-bar";
 
 function AppWrapper() {
   return (
@@ -27,6 +26,7 @@ function AppWrapper() {
 
 function App() {
   const [alert, setAlert] = useState(null);
+  const [progress,setProgress] = useState(0);
   const location = useLocation(); 
 
   const showAlert = (message, type) => {
@@ -39,20 +39,30 @@ function App() {
     }, 1000)
   }
 
+  const updateProgress = (progress)=>{
+    setProgress(progress);
+  }
+
   return (
     <div className="page-container">
       <Navbar />
+      <LoadingBar
+        color="#03045e"
+        height={4}
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
+      />
       {/* {location.pathname !== '/' && <Alert alert={alert} />} */}
       {location.pathname !== '/' && <OutlinedAlerts alert={alert} />}
       <div className="content-wrap">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/choose" element={<Choose />} />
-          <Route path="/teacher" element={<TeacherSignup />} />
-          <Route path="/student" element={<StudentSignup />} />
+          <Route path="/teacher" element={<TeacherSignup showAlert={showAlert} setProgress={updateProgress}/>} />
+          <Route path="/student" element={<StudentSignup showAlert={showAlert} setProgress={updateProgress}/>} />
           <Route path="/student-page" element={<Studentpage showAlert={showAlert} />} />
           <Route path="/teacher-page" element={<Teacherpage showAlert={showAlert} />} />
-          <Route path="/login" element={<Login showAlert={showAlert}/>} />
+          <Route path="/login" element={<Login showAlert={showAlert} setProgress={updateProgress}/>} />
         </Routes>
       </div>
     </div>

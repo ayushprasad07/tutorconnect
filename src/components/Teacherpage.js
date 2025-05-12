@@ -126,7 +126,7 @@ const Teacherpage = (props) => {
       <div className="content-wrap" style={{ minHeight: "100vh" }}>
         <div className="container">
             <div>
-              <h2>Welcome {identity.name},</h2>
+              <h1>Welcome, {identity?.name || "Teacher"}</h1>
               <p className="text-muted fst-italic">"Teaching is the one profession that creates all other professions."</p>
             </div>
           {bookings.length === 0 && (

@@ -1,36 +1,44 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import logo from '../images/tutorConnect-logo.png'
+import image from '../images/defaultStudent.png'
 
-const StudentSignup = () => {
+const StudentSignup = (props) => {
   const [credentials,setCredentials] = useState({name:"",email:"",password:"",phoneNumber:"",location:"",fatherName:"",guardianNumber:""})
+  const [file,setFile] = useState(null);
 
   const navigator = useNavigate();
 
   const handleSubmit = async(e)=>{
     e.preventDefault();
+    props.setProgress(0);
     const {name,email,password,phoneNumber,location,fatherName,guardianNumber} = credentials;
+    const formData = new FormData();
+    formData.append('name',name);
+    formData.append('email',email);
+    formData.append('password',password);
+    formData.append('phoneNumber',phoneNumber);
+    formData.append('location',location);
+    formData.append('fatherName',fatherName);
+    formData.append('guardianNumber',guardianNumber);
+    if(file){
+      formData.append('studentImage',file);
+    }
     try {
       const URL = "http://localhost:4000/api/students/register/student";
+      props.setProgress(10);
       const response = await fetch(URL, {
         method:"POST",
-        headers:{
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          phoneNumber:Number(phoneNumber),
-          location,
-          fatherName,
-          guardianNumber:Number(guardianNumber)
-        })
+        body: formData
       });
-  
+      props.setProgress(30);
       const json = await response.json();
+      props.setProgress(50);
       if(response.ok && json.success){
         localStorage.setItem("token", json.authToken);
+        localStorage.setItem('studentid',json.student._id);
+        props.showAlert(json.message,"success");
+        props.setProgress(100);
         navigator('/student-page');
       }else{
         console.log("Error during registration : ",json.error);
@@ -42,8 +50,13 @@ const StudentSignup = () => {
 
 
   const onChange = (e)=>{
-    setCredentials({...credentials,[e.target.name]:e.target.value});
+    if (e.target.name === 'studentImage'){
+      setFile(e.target.files[0]);
+    }else{
+   setCredentials({...credentials,[e.target.name]:e.target.value});
+    }
   }
+
   return (
     <div className='container'>
       <div className='card container my-3 p-3'>
@@ -55,6 +68,15 @@ const StudentSignup = () => {
             />
       <form onSubmit={handleSubmit}>
         <h1>Sign up to continue</h1>
+        <div className="mb-3">
+                    <div className='d-flex flex-column align-items-center'>
+                        <div className="col-12 col-md-4 text-center mb-3">
+                            <img src={image} alt="Student" className="rounded-circle img-fluid" style={{ maxWidth: '100px', height: '100px', objectFit: 'cover' }} />
+                        </div>
+                    </div>
+                     <label htmlFor="studentImage" className="form-label">Profile</label>
+                    <input type="file" className="form-control" id="studentImage" name="studentImage" onChange={onChange}/>
+         </div>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">Name</label>
           <input type="text" className="form-control" id="name" name="name" aria-describedby="emailHelp" onChange={onChange}/>

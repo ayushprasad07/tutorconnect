@@ -13,8 +13,10 @@ const Studentpage = (props) => {
   );
   const [selectedTeacher, setSelectedTeacher] = useState(null);
 
-  const getTeachers = async () => {
+
+  const getTeachers = useCallback(async () => {
     try {
+
       const response = await fetch('http://localhost:4000/api/teachers/getteacher', {
         method: 'POST',
         headers: {
@@ -35,32 +37,32 @@ const Studentpage = (props) => {
         console.warn("Expected an array, got:", data.teacher);
         setAllTeachers([]);
       }
+
     } catch (error) {
       console.error('Error fetching teachers:', error);
       setAllTeachers([]);
     }
-  };
+  }, []);
 
-  const getBookings = useCallback(async()=>{
+   const getBookings = useCallback(async () => {
     const studentId = localStorage.getItem('studentid');
-    if(!studentId) return;
+    if (!studentId) return;
     try {
       const URL = `http://localhost:4000/api/bookings/getbooking/${studentId}`;
-      const response = await fetch(URL,{
-        method : "POST",
-        headers:{
+      const response = await fetch(URL, {
+        method: "POST",
+        headers: {
           'Content-Type': 'application/json',
         }
       });
       const data = await response.json();
       setGetBooking(data.booking);
-      console.log(getBooking)
     } catch (error) {
-      console.log("Some error occured : ",error);
+      console.log("Some error occurred: ", error);
     }
-  },[])
+  }, []);
 
-  const getUser = async () => {
+  const getUser = useCallback(async () => {
     const studentid = localStorage.getItem('studentid');
     if (!studentid) return;
     const URL = `http://localhost:4000/api/students/${studentid}`;
@@ -76,7 +78,7 @@ const Studentpage = (props) => {
     } catch (error) {
       console.error('Failed to fetch user:', error);
     }
-  };
+  }, []);
 
   const handleClick = async (teacherid) => {
     if (!bookingDateTime) {
@@ -118,7 +120,11 @@ const Studentpage = (props) => {
     getTeachers();
     getUser();
     getBookings();
-  }, [getBookings]);
+  }, [getTeachers, getUser, getBookings]);
+
+  useEffect(() => {
+    console.log("teachers are :", allTeachers);
+  }, [allTeachers]);
 
   return (
     <div>
@@ -170,7 +176,7 @@ const Studentpage = (props) => {
                 <div className="col-12 col-sm-6 col-md-4 col-lg-4 mb-4 p-3" key={teacher._id}>
                   <div className="card h-100 shadow-sm">
                     <img
-                      src={image}
+                      src={teacher.teacherImage ? teacher.teacherImage:image}
                       className="card-img-top rounded-circle mx-auto d-block mt-3"
                       alt="Teacher"
                       style={{ width: '100px', height: '100px', objectFit: 'cover' }}

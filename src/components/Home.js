@@ -13,7 +13,7 @@ import Footer from './Footer'
 const Home = () => {
   return (
     <>
-    <div className="card text-center my-3" style={{ background: "linear-gradient(to right, white, #e6f6fa 30%, #e6f6fa 70%, white)", border: "none" }}>
+    <div className="card text-center" style={{ background: "linear-gradient(to right, white, #e6f6fa 30%, #e6f6fa 70%, white)", border: "none",marginTop:"70px"}}>
       <div className="row g-0">
         <div className="col-md-4 d-flex align-items-center">
           <img src={image} className="img-fluid rounded-start" alt="tutorConnect" />

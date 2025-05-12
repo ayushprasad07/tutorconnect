@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const teacherSchema = new Schema({
     name: { type: String, required: true },
-    teacherImage:{ type:String, required:true},
+    teacherImage:{ type:String},
     email: { type: String, required: true },
     password: { type: String, required: true },
     phoneNumber: { type: Number, required: true },

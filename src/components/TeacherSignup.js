@@ -1,53 +1,69 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import logo from '../images/tutorConnect-logo.png'
+import image from '../images/defaultTeacher.jpg';
 
-const TeacherSignup = () => {
+
+const TeacherSignup = (props) => {
     const [credentials, setCredentials] = useState({
         name: "", email: "", password: "", phoneNumber: "",
         subject: "", chargesPerHour: "", bio: "", location: ""
-      });      
+      });    
+    const [file,setFile] = useState(null);  
     
     let navigation = useNavigate();
 
-    const handleSubmit = async (e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const {name,email,password,phoneNumber,subject,chargesPerHour,bio,location} = credentials;
-        const URL = "http://localhost:4000/api/teachers/register/teacher"
+        props.setProgress(0);
+        const { name, email, password, phoneNumber, subject, chargesPerHour, bio, location } = credentials;
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('phoneNumber', phoneNumber);
+        formData.append('subject', subject);
+        formData.append('chargesPerHour', chargesPerHour);
+        formData.append('bio', bio);
+        formData.append('location', location);
+        
+        if (file) {
+            formData.append('teacherImage', file);
+        }
+
+        const URL = "http://localhost:4000/api/teachers/register/teacher";
+
         try {
-            const response = await fetch(URL,{
-                method:"POST",
-                headers:{
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name,
-                    email,
-                    password,
-                    phoneNumber: Number(phoneNumber),
-                    subject,
-                    chargesPerHour: Number(chargesPerHour),
-                    bio,
-                    location
-                })
+            const response = await fetch(URL, {
+            method: "POST",
+            body: formData,
             });
-
+            props.setProgress(40);
             const json = await response.json();
-
-            if(response.ok && json.success){
-                localStorage.setItem('token', json.authToken);
-                navigation('/');
+            props.setProgress(50);
+            if (response.ok && json.success) {
+            console.log("Registration Successful, token:", json.authToken); 
+            localStorage.setItem('teacherid',json.teacher._id);
+            localStorage.setItem('token', json.authToken);
+            props.showAlert(json.message, "success");
+            props.setProgress(100);
+            navigation('/teacher-page');
             } else {
-                console.error("Error during registration:", json.error);
+            console.error("Error during registration:", json.error);
+            props.showAlert(json.message, "danger");
             }
-
         } catch (error) {
             console.error("An error occurred during the request:", error);
+            props.showAlert("An error occurred", "danger");
         }
-    }
+        };
 
     const onChange = (e)=>{
-        setCredentials({...credentials,[e.target.name]:e.target.value})
+        if(e.target.name === 'teacherImage'){
+            setFile(e.target.files[0]);
+        }else{
+            setCredentials({...credentials,[e.target.name]:e.target.value})
+        }
     }
 
   return (
@@ -61,6 +77,15 @@ const TeacherSignup = () => {
             />
         <h1>Sign up to Continue</h1>
       <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+            <div className='d-flex flex-column align-items-center'>
+                <div className="col-12 col-md-4 text-center mb-3">
+                    <img src={image} alt="Teacher" className="rounded-circle img-fluid" style={{ maxWidth: '100px', height: '100px', objectFit: 'cover' }} />
+                </div>
+            </div>
+             <label htmlFor="teacherImage" className="form-label">Profile</label>
+            <input type="file" className="form-control" id="teacherImage" name="teacherImage" onChange={onChange}/>
+        </div>
         <div className="mb-3">
             <label htmlFor="name" className="form-label">Name</label>
             <input type="text" className="form-control" id="name" name="name" onChange={onChange}/>

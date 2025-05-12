@@ -14,8 +14,10 @@ const Login = (props) => {
         e.preventDefault();
         const {email,password} = credentials;
         try {
+            props.setProgress(0);
             const route = role==="student" ? "/api/students/login/student" : "/api/teachers/login/teacher";
             const URL = `http://localhost:4000${route}`;
+            props.setProgress(30);
             const response = await fetch(URL,{
                 method:"POST",
                 headers:{
@@ -27,17 +29,20 @@ const Login = (props) => {
                 })
             })
             const json  = await response.json();
+            props.setProgress(50);
             if(response.ok && json.success){
                 localStorage.setItem("token",json.authToken);
                 const decodedToken = jwtDecode(json.authToken);
                 console.log("decoded token : ",decodedToken)
                 if(role==="student"){
                     localStorage.setItem('studentid',decodedToken.student.id);
+                    props.setProgress(100);
                     navigator('/student-page');
                     props.showAlert(json.message,"success");
                 }else{
                     localStorage.setItem('teacherid',decodedToken.teacher.id);
                     navigator('/teacher-page');
+                    props.setProgress(100);
                     props.showAlert(json.message,"success");
                 }
             }else{

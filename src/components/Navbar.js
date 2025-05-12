@@ -144,7 +144,7 @@ const Navbar = () => {
 
   return (
     <div>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+      <nav className="navbar navbar-expand-lg bg-body-tertiary fixed-top">
         <div className="container-fluid">
           <img src={logo} alt="Logo" width="30" height="24" className="d-inline-block align-text-top" />
           <Link className="navbar-brand" to="/">tutorConnect</Link>
@@ -155,20 +155,29 @@ const Navbar = () => {
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               {!localStorage.getItem('token') &&
                 <li className="nav-item">
-                  <Link type="button" class="btn btn-outline-dark" aria-current="page" to="/"><i class="fa-solid fa-house mx-1"></i>Home</Link>
+                  <Link type="button" className="btn btn-outline-dark" aria-current="page" to="/"><i className="fa-solid fa-house mx-1"></i>Home</Link>
                 </li>
               }
             </ul>
             {!isLoggedIn ? (
               <div>
-                <Link to='/choose' className="btn btn-outline-primary mx-2"><i class="fa-solid fa-user-plus mx-2"></i>Sign up</Link>
-                <Link to='/login' className="btn btn-outline-primary mx-2"> <i class="fa-solid fa-right-to-bracket mx-2"></i>Login</Link>
+                <Link to='/choose' className="btn btn-outline-primary mx-2"><i className="fa-solid fa-user-plus mx-2"></i>Sign up</Link>
+                <Link to='/login' className="btn btn-outline-primary mx-2"> <i className="fa-solid fa-right-to-bracket mx-2"></i>Login</Link>
               </div>
             ) : (
-              <div className='d-flex justify-content-center align-items-center'>
-                <button className="btn btn-outline-primary mx-2" onClick={handleLogout}><i class="fa-solid fa-right-from-bracket mx-2"></i>Log out</button>
-                <i className="fa-solid fa-circle-user fa-2x mx-2" onClick={handleClick} style={{ cursor: "pointer" }}></i>
+             <div className='d-flex justify-content-center align-items-center'>
+                <button className="btn btn-outline-primary mx-2 my-1" onClick={handleLogout}>
+                  <i className="fa-solid fa-right-from-bracket mx-2"></i>Log out
+                </button>
+
+                {localStorage.getItem('teacherid') && (
+                  // <img className="rounded-circle mx-2 my-1" src={!user.teacherImage ? image : user.teacherImage} onClick={handleClick} alt="teacher" style={{  height: "40px", width: "40px", objectFit: "cover", cursor: "pointer" }} />
+                  <img className="rounded-circle mx-2 my-1" src={!user.teacherImage ? image : user.teacherImage} onClick={handleClick} alt="teacher" width="30" height="24" style={{cursor:"pointer"}}/>
+                )}
+                {localStorage.getItem('studentid') && 
+                 <img className="rounded-circle mx-2 my-1" src={!user.studentImage ? image : user.studentImage} onClick={handleClick} alt="student" width="30" height="24" style={{cursor:"pointer"}}/>}
               </div>
+
             )}
           </div>
         </div>
@@ -197,7 +206,10 @@ const Navbar = () => {
           <button type="button" className="btn-close" data-bs-dismiss="offcanvas"></button>
         </div>
         <div className="offcanvas-body">
-          <img className="img-fluid rounded-circle mb-3" src={image} alt="student" style={{ height: "100px", width: "100px" }} />
+          {localStorage.getItem('teacherid') &&           
+          <img className="img-fluid rounded-circle mb-3" src={!user.teacherImage ?image:user.teacherImage} alt="teacher" style={{ height: "100px", width: "100px" }} />}
+          {localStorage.getItem('studentid') &&           
+          <img className="img-fluid rounded-circle mb-3" src={!user.studentImage ?image:user.studentImage} alt="student" style={{ height: "100px", width: "100px" }} />}
           <h5>{user.name}</h5>
           <p className="text-muted">{user.email}</p>
           <p className="text-muted">{user.phoneNumber}</p>
