@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
 import logo from '../images/tutorConnect-logo.png'
+import { Link } from 'react-router-dom';
 
 
 const Login = (props) => {
@@ -110,6 +111,7 @@ const Login = (props) => {
             <label className="form-check-label" htmlFor="teacher">Teacher</label>
             </div>
         </div>
+        <p>Don't have an account? <Link to="/choose">Sign up</Link></p>
         <button type="submit" className="btn btn-primary">login</button>
       </form>
     </div>

@@ -154,8 +154,8 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               {!localStorage.getItem('token') &&
-                <li className="nav-item">
-                  <Link type="button" className="btn btn-outline-dark" aria-current="page" to="/"><i className="fa-solid fa-house mx-1"></i>Home</Link>
+                <li class="nav-item">
+                  <Link class="nav-link active" aria-current="page" to="/"><i className="fa-solid fa-house mx-1"></i>Home</Link>
                 </li>
               }
             </ul>
