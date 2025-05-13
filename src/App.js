@@ -13,8 +13,9 @@ import Studentpage from './components/Studentpage';
 import Login from './components/Login';
 import Teacherpage from './components/Teacherpage';
 import { useState } from 'react';
-import OutlinedAlerts from './components/OutlinedAlerts';
+// import OutlinedAlerts from './components/OutlinedAlerts';
 import LoadingBar from "react-top-loading-bar";
+import  Alert from './components/Alert.js';
 
 function AppWrapper() {
   return (
@@ -52,8 +53,8 @@ function App() {
         progress={progress}
         onLoaderFinished={() => setProgress(0)}
       />
-      {/* {location.pathname !== '/' && <Alert alert={alert} />} */}
-      {location.pathname !== '/' && <OutlinedAlerts alert={alert} />}
+      {location.pathname !== '/' && <Alert alert={alert} />}
+      {/* {location.pathname !== '/' && <Alert alert={alert}/>} */}
       <div className="content-wrap">
         <Routes>
           <Route path="/" element={<Home />} />

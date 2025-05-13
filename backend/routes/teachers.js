@@ -140,4 +140,19 @@ router.put('/teacher/editprofile/:teacherid', async (req, res) => {
     }
 });
 
+//ROUTE 6: get teacher wrt location '/getTeacherByLocation'
+router.post('/getTeacherByLocation', fetchUser, async (req, res) => {
+    try {
+        const location = req.body.location;
+        const teacher = await Teachers.find({location:location});
+        if(!teacher){
+            return res.status(400).json({message:"No teacher is found in that location"});
+        }
+        res.status(200).json({ success: true, teacher });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ success: false, error: "Internal server error" });
+    }
+});
+
 module.exports = router;

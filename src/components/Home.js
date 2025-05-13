@@ -34,46 +34,40 @@ const Home = () => {
         </div>
       </div>
     </div>
-    <div className="card text-center border-0">
+    <div className="card text-center border-0 my-2">
       <div className="card-body">
         <h1 className="card-title">How it Works</h1>
         <div className="container my-5">
-          <div className="row g-4 justify-content-center">
+          <div className="row g-3 justify-content-center flex-nowrap">
             {/* Card 1 */}
-            <div className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
-              <div className="card text-center border-0" style={{ maxWidth: "18rem" }}>
-                <img src={search} className="card-img-top" alt="Search tutors" />
-                <div className="card-body">
-                  <h5 className="card-title">Search and filter tutors</h5>
-                  <p className="card-text">
-                    Search tutors by subject and location.
-                  </p>
+            <div className="col-4 col-sm-4 col-md-4 d-flex justify-content-center">
+              <div className="card text-center border-0 w-100" style={{ maxWidth: "100%" }}>
+                <img src={search} className="card-img-top img-fluid" alt="Search tutors" style={{ maxHeight: "100px", objectFit: "contain" }} />
+                <div className="card-body p-2">
+                  <h6 className="card-title mb-2">Search and filter tutors</h6>
+                  <p className="card-text small">Search tutors by subject and location.</p>
                 </div>
               </div>
             </div>
 
             {/* Card 2 */}
-            <div className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
-              <div className="card text-center border-0" style={{ maxWidth: "18rem" }}>
-                <img src={aval} className="card-img-top" alt="Check availability" />
-                <div className="card-body">
-                  <h5 className="card-title">Check Availability and Fees</h5>
-                  <p className="card-text">
-                    View the availability of the tutor and fees per hour.
-                  </p>
+            <div className="col-4 col-sm-4 col-md-4 d-flex justify-content-center">
+              <div className="card text-center border-0 w-100" style={{ maxWidth: "100%" }}>
+                <img src={aval} className="card-img-top img-fluid" alt="Check availability" style={{ maxHeight: "100px", objectFit: "contain" }} />
+                <div className="card-body p-2">
+                  <h6 className="card-title mb-2">Check Availability and Fees</h6>
+                  <p className="card-text small">View the availability of the tutor and fees per hour.</p>
                 </div>
               </div>
             </div>
 
             {/* Card 3 */}
-            <div className="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
-              <div className="card text-center border-0" style={{ maxWidth: "18rem" }}>
-                <img src={learning} className="card-img-top" alt="Start learning" />
-                <div className="card-body">
-                  <h5 className="card-title">Book and Start Learning</h5>
-                  <p className="card-text">
-                    Schedule lessons with your chosen tutor.
-                  </p>
+            <div className="col-4 col-sm-4 col-md-4 d-flex justify-content-center">
+              <div className="card text-center border-0 w-100" style={{ maxWidth: "100%" }}>
+                <img src={learning} className="card-img-top img-fluid" alt="Start learning" style={{ maxHeight: "100px", objectFit: "contain" }} />
+                <div className="card-body p-2">
+                  <h6 className="card-title mb-2">Book and Start Learning</h6>
+                  <p className="card-text small">Schedule lessons with your chosen tutor.</p>
                 </div>
               </div>
             </div>
@@ -82,7 +76,8 @@ const Home = () => {
       </div>
     </div>
 
-    <div className="container text-center py-5">
+
+    <div className="container text-center ">
         <h1 className="mb-5">Why choose tutorConnect?</h1>
         <div className="row g-4">
           {[{ img: verified, title: "Verified Tutors" },
