@@ -167,22 +167,21 @@ const Studentpage = (props) => {
                     maxHeight: getBooking.length > 4 ? '300px' : 'auto',
                     overflowY: getBooking.length > 4 ? 'auto' : 'visible',
                   }}>
-                    {getBooking.length === 0 ? (
-                      <p className="card-text">No bookings yet.</p>
-                    ) : (
-                      getBooking.map((booking) => (
-                        <div key={booking._id} className="mb-3 p-2 border rounded">
-                          <p><strong>Teacher:</strong> {booking.teacher?.name || 'N/A'}
-                            {booking.status === 'pending' && <span className="badge text-bg-warning mx-1">{booking.status}</span>}
-                            {booking.status === 'cancelled' && <span className="badge text-bg-danger mx-1">{booking.status}</span>}
-                            {booking.status === 'confirmed' && <span className="badge text-bg-success mx-1">{booking.status}</span>}
-                          </p>
-                          <p><strong>Subject:</strong> {booking.teacher?.subject || 'N/A'}</p>
-                          <p><strong>Date:</strong> {new Date(booking.bookingDateTime).toLocaleDateString()}</p>
-                          <p><strong>Time:</strong> {new Date(booking.bookingDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                        </div>
-                      ))
-                    )}
+                    {[...getBooking]
+                    .sort((a, b) => new Date(b.bookingDateTime) - new Date(a.bookingDateTime))
+                    .map((booking) => (
+                      <div key={booking._id} className="mb-3 p-2 border rounded">
+                        <p><strong>Teacher:</strong> {booking.teacher?.name || 'N/A'}
+                          {booking.status === 'pending' && <span className="badge text-bg-warning mx-1">{booking.status}</span>}
+                          {booking.status === 'cancelled' && <span className="badge text-bg-danger mx-1">{booking.status}</span>}
+                          {booking.status === 'confirmed' && <span className="badge text-bg-success mx-1">{booking.status}</span>}
+                        </p>
+                        <p><strong>Subject:</strong> {booking.teacher?.subject || 'N/A'}</p>
+                        <p><strong>Date:</strong> {new Date(booking.bookingDateTime).toLocaleDateString()}</p>
+                        <p><strong>Time:</strong> {new Date(booking.bookingDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                      </div>
+                  ))}
+
                   </div>
                 </div>
               </div>

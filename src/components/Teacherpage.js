@@ -22,7 +22,10 @@ const Teacherpage = (props) => {
       });
       const data = await response.json();
       if (Array.isArray(data.booking)) {
-        setBookings(data.booking);
+        const sortedBookings = data.booking.sort(
+          (a, b) => new Date(b.bookingDateTime) - new Date(a.bookingDateTime)
+        );
+        setBookings(sortedBookings);
       } else {
         setBookings([]);
       }
@@ -77,7 +80,10 @@ const Teacherpage = (props) => {
       });
       if (response.ok) {
         const data = await response.json();
-        setTeacherBooking(data.bookings);
+        const sortedTeacherBookings = data.bookings.sort(
+          (a, b) => new Date(b.bookingDateTime) - new Date(a.bookingDateTime)
+        );
+        setTeacherBooking(sortedTeacherBookings);
       }
     } catch (error) {
       console.log("Some error occurred: ", error);
@@ -171,7 +177,7 @@ const Teacherpage = (props) => {
                   <div className="col-12 col-sm-6 col-lg-6 mb-4 p-3" key={booking._id}>
                     <div className={`card h-100 shadow-sm ${booking.status === 'cancelled' ? 'disabled-card' : ''}`}>
                       <img
-                        src={image}
+                        src={booking.student.studentImage ? booking.student.studentImage:image}
                         className="card-img-top rounded-circle mx-auto d-block mt-3"
                         alt="Student"
                         style={{ width: '100px', height: '100px', objectFit: 'cover' }}

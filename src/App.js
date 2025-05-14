@@ -37,7 +37,7 @@ function App() {
     });
     setTimeout(() => {
       setAlert(null)
-    }, 1000)
+    }, 3000)
   }
 
   const updateProgress = (progress)=>{
@@ -46,7 +46,7 @@ function App() {
 
   return (
     <div className="page-container">
-      <Navbar />
+      <Navbar showAlert={showAlert}/>
       <LoadingBar
         color="#03045e"
         height={4}

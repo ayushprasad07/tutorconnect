@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import image from '../images/defaultStudent.png';
 import logo from '../images/tutorConnect-logo.png';
 
-const Navbar = () => {
+const Navbar = (props) => {
   const [user, setUser] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [update,setUpdate] = useState({});
@@ -17,6 +17,7 @@ const Navbar = () => {
     localStorage.removeItem('teacherid');
     setUser({});
     setIsLoggedIn(false);
+    props.showAlert("Logged Out Successfully","success")
     navigator('/');
   };
 

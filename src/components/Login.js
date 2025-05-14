@@ -95,8 +95,9 @@ const Login = (props) => {
                 value="student"
                 checked={role === "student"}
                 onChange={handleRoleClick}
+                style={{cursor:"pointer"}}
             />
-            <label className="form-check-label" htmlFor="student">Student</label>
+            <label className="form-check-label" htmlFor="student" style={{cursor:"pointer"}}>Student</label>
             </div>
             <div className="form-check form-check-inline">
             <input
@@ -107,8 +108,9 @@ const Login = (props) => {
                 value="teacher"
                 checked={role === "teacher"}
                 onChange={handleRoleClick}
+                style={{cursor:"pointer"}}
             />
-            <label className="form-check-label" htmlFor="teacher">Teacher</label>
+            <label className="form-check-label" htmlFor="teacher" style={{cursor:"pointer"}}>Teacher</label>
             </div>
         </div>
         <p>Don't have an account? <Link to="/choose">Sign up</Link></p>
