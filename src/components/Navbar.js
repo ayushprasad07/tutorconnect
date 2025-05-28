@@ -154,12 +154,21 @@ const Navbar = (props) => {
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              {!localStorage.getItem('token') &&
-                <li class="nav-item">
-                  <Link class="nav-link active" aria-current="page" to="/"><i className="fa-solid fa-house mx-1"></i>Home</Link>
+              {!localStorage.getItem('token') && (
+                <li className="nav-item">
+                  <Link className="nav-link active" aria-current="page" to="/">
+                    <i className="fa-solid fa-house mx-1"></i>Home
+                  </Link>
                 </li>
-              }
+              )}
+              
+              {user && user.name && (
+                <li className="nav-item d-flex align-items-center">
+                  {user && <span className="nav-link">Hi, {user.name}</span>}
+                </li>
+              )}
             </ul>
+
             {!isLoggedIn ? (
               <div>
                 <Link to='/choose' className="btn btn-outline-primary mx-2"><i className="fa-solid fa-user-plus mx-2"></i>Sign up</Link>
