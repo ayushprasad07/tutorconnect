@@ -17,7 +17,7 @@ const Login = (props) => {
         try {
             props.setProgress(0);
             const route = role==="student" ? "/api/students/login/student" : "/api/teachers/login/teacher";
-            const URL = `http://localhost:4000${route}`;
+            const URL = `${process.env.REACT_APP_API_BASE_URL}${route}`;
             props.setProgress(30);
             const response = await fetch(URL,{
                 method:"POST",

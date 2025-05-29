@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import logo from '../images/tutorConnect-logo.png'
 import image from '../images/defaultStudent.png'
 
+const BASE_URL = "https://tutorconnect-6.onrender.com"; // <-- Change this to your actual backend URL
+
 const StudentSignup = (props) => {
   const [credentials,setCredentials] = useState({name:"",email:"",password:"",phoneNumber:"",location:"",fatherName:"",guardianNumber:""})
   const [file,setFile] = useState(null);
@@ -25,7 +27,7 @@ const StudentSignup = (props) => {
       formData.append('studentImage',file);
     }
     try {
-      const URL = "http://localhost:4000/api/students/register/student";
+      const URL = `${BASE_URL}/api/students/register/student`; // updated URL here
       props.setProgress(10);
       const response = await fetch(URL, {
         method:"POST",
@@ -53,7 +55,7 @@ const StudentSignup = (props) => {
     if (e.target.name === 'studentImage'){
       setFile(e.target.files[0]);
     }else{
-   setCredentials({...credentials,[e.target.name]:e.target.value});
+      setCredentials({...credentials,[e.target.name]:e.target.value});
     }
   }
 

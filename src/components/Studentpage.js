@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import image from '../images/defaultTeacher.jpg';
 import Footer from './Footer';
-import noTeacher from '../images/ Noteacher.png'
+import noTeacher from '../images/ Noteacher.png';
+
+const BASE_URL = "https://tutorconnect-6.onrender.com"; // <-- change this
 
 const Studentpage = (props) => {
   const [getBooking, setGetBooking] = useState([]);
@@ -14,13 +16,12 @@ const Studentpage = (props) => {
   );
   const [selectedTeacher, setSelectedTeacher] = useState(null);
 
-
   const getBookings = useCallback(async () => {
     const studentId = localStorage.getItem('studentid');
     if (!studentId) return;
 
     try {
-      const URL = `http://localhost:4000/api/bookings/getbooking/${studentId}`;
+      const URL = `${BASE_URL}/api/bookings/getbooking/${studentId}`;
       const response = await fetch(URL, {
         method: "POST",
         headers: {
@@ -39,13 +40,12 @@ const Studentpage = (props) => {
     }
   }, []);
 
-
   const getUser = useCallback(async () => {
     const studentid = localStorage.getItem('studentid');
     if (!studentid) return;
 
     try {
-      const response = await fetch(`http://localhost:4000/api/students/${studentid}`, {
+      const response = await fetch(`${BASE_URL}/api/students/${studentid}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,10 +59,9 @@ const Studentpage = (props) => {
     }
   }, []);
 
-
   const getTeachers = useCallback(async (studentLocation) => {
     try {
-      const response = await fetch('http://localhost:4000/api/teachers/getTeacherByLocation', {
+      const response = await fetch(`${BASE_URL}/api/teachers/getTeacherByLocation`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +82,6 @@ const Studentpage = (props) => {
     }
   }, []);
 
-
   const handleClick = async (teacherid) => {
     if (!bookingDateTime) {
       props.showAlert("Select Booking Date and Time", "danger");
@@ -97,7 +95,7 @@ const Studentpage = (props) => {
     }
 
     try {
-      const response = await fetch("http://localhost:4000/api/bookings/", {
+      const response = await fetch(`${BASE_URL}/api/bookings/`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -121,12 +119,10 @@ const Studentpage = (props) => {
     }
   };
 
-
   useEffect(() => {
     getUser();
     getBookings();
   }, [getUser, getBookings]);
-
 
   useEffect(() => {
     if (user.location) {
@@ -141,9 +137,9 @@ const Studentpage = (props) => {
 
         {allTeachers.length === 0 ? (
           <div className="d-flex justify-content-center align-items-center vh-100 flex-column">
-              <div className="card border-0" style={{ width: "18rem" }}>
-                <img src={noTeacher} className="card-img-top" alt="No Bookings" />
-              </div>
+            <div className="card border-0" style={{ width: "18rem" }}>
+              <img src={noTeacher} className="card-img-top" alt="No Bookings" />
+            </div>
           </div>
         ) : (
           <>
@@ -168,19 +164,19 @@ const Studentpage = (props) => {
                     overflowY: getBooking.length > 4 ? 'auto' : 'visible',
                   }}>
                     {[...getBooking]
-                    .sort((a, b) => new Date(b.bookingDateTime) - new Date(a.bookingDateTime))
-                    .map((booking) => (
-                      <div key={booking._id} className="mb-3 p-2 border rounded">
-                        <p><strong>Teacher:</strong> {booking.teacher?.name || 'N/A'}
-                          {booking.status === 'pending' && <span className="badge text-bg-warning mx-1">{booking.status}</span>}
-                          {booking.status === 'cancelled' && <span className="badge text-bg-danger mx-1">{booking.status}</span>}
-                          {booking.status === 'confirmed' && <span className="badge text-bg-success mx-1">{booking.status}</span>}
-                        </p>
-                        <p><strong>Subject:</strong> {booking.teacher?.subject || 'N/A'}</p>
-                        <p><strong>Date:</strong> {new Date(booking.bookingDateTime).toLocaleDateString()}</p>
-                        <p><strong>Time:</strong> {new Date(booking.bookingDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                      </div>
-                  ))}
+                      .sort((a, b) => new Date(b.bookingDateTime) - new Date(a.bookingDateTime))
+                      .map((booking) => (
+                        <div key={booking._id} className="mb-3 p-2 border rounded">
+                          <p><strong>Teacher:</strong> {booking.teacher?.name || 'N/A'}
+                            {booking.status === 'pending' && <span className="badge text-bg-warning mx-1">{booking.status}</span>}
+                            {booking.status === 'cancelled' && <span className="badge text-bg-danger mx-1">{booking.status}</span>}
+                            {booking.status === 'confirmed' && <span className="badge text-bg-success mx-1">{booking.status}</span>}
+                          </p>
+                          <p><strong>Subject:</strong> {booking.teacher?.subject || 'N/A'}</p>
+                          <p><strong>Date:</strong> {new Date(booking.bookingDateTime).toLocaleDateString()}</p>
+                          <p><strong>Time:</strong> {new Date(booking.bookingDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                        </div>
+                      ))}
 
                   </div>
                 </div>
@@ -224,9 +220,6 @@ const Studentpage = (props) => {
           </>
         )}
       </div>
-
-        
-
 
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">

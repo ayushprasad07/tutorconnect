@@ -12,10 +12,12 @@ const Teacherpage = (props) => {
   const [teacherBooking, setTeacherBooking] = useState([]);
   const ref = useRef(null);
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const getBookings = async () => {
     const teacherid = localStorage.getItem('teacherid');
     try {
-      const URL = `http://localhost:4000/api/bookings/teacher/${teacherid}`;
+      const URL = `${API_BASE_URL}/api/bookings/teacher/${teacherid}`;
       const response = await fetch(URL, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -36,7 +38,7 @@ const Teacherpage = (props) => {
 
   const confirm = async (bookingId) => {
     try {
-      const URL = `http://localhost:4000/api/bookings/accept/${bookingId}`;
+      const URL = `${API_BASE_URL}/api/bookings/accept/${bookingId}`;
       const response = await fetch(URL, {
         method: "PUT",
         headers: { 'Content-Type': 'application/json' },
@@ -53,7 +55,7 @@ const Teacherpage = (props) => {
 
   const reject = async (bookingId) => {
     try {
-      const URL = `http://localhost:4000/api/bookings/cancel/${bookingId}`;
+      const URL = `${API_BASE_URL}/api/bookings/cancel/${bookingId}`;
       const response = await fetch(URL, {
         method: "PUT",
         headers: { 'Content-Type': 'application/json' },
@@ -71,7 +73,7 @@ const Teacherpage = (props) => {
   const getTeacherBooking = async () => {
     try {
       const teacherId = localStorage.getItem('teacherid');
-      const URL = `http://localhost:4000/api/bookings/getbooking/teacher/${teacherId}`;
+      const URL = `${API_BASE_URL}/api/bookings/getbooking/teacher/${teacherId}`;
       const response = await fetch(URL, {
         method: "POST",
         headers: {
@@ -93,7 +95,7 @@ const Teacherpage = (props) => {
   const getTeacher = async () => {
     try {
       const teacherId = localStorage.getItem('teacherid');
-      const URL = `http://localhost:4000/api/teachers/get/${teacherId}`;
+      const URL = `${API_BASE_URL}/api/teachers/get/${teacherId}`;
       const response = await fetch(URL, {
         method: "POST",
         headers: {

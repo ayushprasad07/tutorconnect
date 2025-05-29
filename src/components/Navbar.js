@@ -3,10 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import image from '../images/defaultStudent.png';
 import logo from '../images/tutorConnect-logo.png';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const Navbar = (props) => {
   const [user, setUser] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
-  const [update,setUpdate] = useState({});
+  const [update, setUpdate] = useState({});
   const navigator = useNavigate();
   const ref = useRef();
   const editref = useRef();
@@ -17,7 +19,7 @@ const Navbar = (props) => {
     localStorage.removeItem('teacherid');
     setUser({});
     setIsLoggedIn(false);
-    props.showAlert("Logged Out Successfully","success")
+    props.showAlert("Logged Out Successfully", "success");
     navigator('/');
   };
 
@@ -33,7 +35,7 @@ const Navbar = (props) => {
   const getTeacher = async () => {
     try {
       const teacherId = localStorage.getItem('teacherid');
-      const URL = `http://localhost:4000/api/teachers/get/${teacherId}`;
+      const URL = `${API_BASE_URL}/api/teachers/get/${teacherId}`;
       const response = await fetch(URL, {
         method: 'POST',
         headers: {
@@ -41,32 +43,32 @@ const Navbar = (props) => {
         },
       });
       const data = await response.json();
-      console.log("Teachers details : ",data);
+      console.log("Teachers details : ", data);
       setUser(data.teacher);
     } catch (error) {
       console.log('Some error occurred', error);
     }
   };
 
-  const handleUpdate = ()=>{
-    if(localStorage.getItem('teacherid')){
+  const handleUpdate = () => {
+    if (localStorage.getItem('teacherid')) {
       updateTeacherProfile();
-    }else{
+    } else {
       updateStudentProfile();
     }
-  }
+  };
 
-  const onChange = (e)=>{
-    setUpdate({...update,[e.target.name]:e.target.value})
-  }
+  const onChange = (e) => {
+    setUpdate({ ...update, [e.target.name]: e.target.value });
+  };
 
-  const updateTeacherProfile = async()=>{
-    const {name,bio,location,chargesPerHour,phoneNumber} = update;
+  const updateTeacherProfile = async () => {
+    const { name, bio, location, chargesPerHour, phoneNumber } = update;
     const teacherId = localStorage.getItem('teacherid');
-    const URL = `http://localhost:4000/api/teachers/teacher/editprofile/${teacherId}`;
-    const response = await fetch(URL,{
-      method:"PUT",
-      headers:{
+    const URL = `${API_BASE_URL}/api/teachers/teacher/editprofile/${teacherId}`;
+    const response = await fetch(URL, {
+      method: "PUT",
+      headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -76,20 +78,20 @@ const Navbar = (props) => {
         chargesPerHour,
         phoneNumber
       }),
-    })
-    const data = response.json();
+    });
+    const data = await response.json();
     console.log(data);
     await getTeacher();
-  }
+  };
 
-  const updateStudentProfile = async()=>{
+  const updateStudentProfile = async () => {
     try {
-      const {name,location,phoneNumber} = update;
+      const { name, location, phoneNumber } = update;
       const studentId = localStorage.getItem('studentid');
-      const URL = `http://localhost:4000/api/students/update/${studentId}`;
-      const response = await fetch(URL,{
-        method:"PUT",
-        headers:{
+      const URL = `${API_BASE_URL}/api/students/update/${studentId}`;
+      const response = await fetch(URL, {
+        method: "PUT",
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -97,20 +99,19 @@ const Navbar = (props) => {
           location,
           phoneNumber
         }),
-      })
-      const data = response.json();
+      });
+      const data = await response.json();
       console.log(data);
       await getUser();
     } catch (error) {
-      console.log("error", error)
+      console.log("error", error);
     }
-  }
-
+  };
 
   const getUser = async () => {
     const studentid = localStorage.getItem('studentid');
     if (!studentid) return;
-    const URL = `http://localhost:4000/api/students/${studentid}`;
+    const URL = `${API_BASE_URL}/api/students/${studentid}`;
     try {
       const response = await fetch(URL, {
         method: 'POST',
@@ -161,7 +162,7 @@ const Navbar = (props) => {
                   </Link>
                 </li>
               )}
-              
+
               {user && user.name && (
                 <li className="nav-item d-flex align-items-center">
                   {user && <span className="nav-link">Hi, {user.name}</span>}
@@ -172,22 +173,20 @@ const Navbar = (props) => {
             {!isLoggedIn ? (
               <div>
                 <Link to='/choose' className="btn btn-outline-primary mx-2"><i className="fa-solid fa-user-plus mx-2"></i>Sign up</Link>
-                <Link to='/login' className="btn btn-outline-primary mx-2"> <i className="fa-solid fa-right-to-bracket mx-2"></i>Login</Link>
+                <Link to='/login' className="btn btn-outline-primary mx-2"><i className="fa-solid fa-right-to-bracket mx-2"></i>Login</Link>
               </div>
             ) : (
-             <div className='d-flex justify-content-center align-items-center'>
+              <div className='d-flex justify-content-center align-items-center'>
                 <button className="btn btn-outline-primary mx-2 my-1" onClick={handleLogout}>
                   <i className="fa-solid fa-right-from-bracket mx-2"></i>Log out
                 </button>
 
                 {localStorage.getItem('teacherid') && (
-                  // <img className="rounded-circle mx-2 my-1" src={!user.teacherImage ? image : user.teacherImage} onClick={handleClick} alt="teacher" style={{  height: "40px", width: "40px", objectFit: "cover", cursor: "pointer" }} />
-                  <img className="rounded-circle mx-2 my-1" src={!user.teacherImage ? image : user.teacherImage} onClick={handleClick} alt="teacher" width="30" height="24" style={{cursor:"pointer"}}/>
+                  <img className="rounded-circle mx-2 my-1" src={!user.teacherImage ? image : user.teacherImage} onClick={handleClick} alt="teacher" width="30" height="24" style={{ cursor: "pointer" }} />
                 )}
-                {localStorage.getItem('studentid') && 
-                 <img className="rounded-circle mx-2 my-1" src={!user.studentImage ? image : user.studentImage} onClick={handleClick} alt="student" width="30" height="24" style={{cursor:"pointer"}}/>}
+                {localStorage.getItem('studentid') &&
+                  <img className="rounded-circle mx-2 my-1" src={!user.studentImage ? image : user.studentImage} onClick={handleClick} alt="student" width="30" height="24" style={{ cursor: "pointer" }} />}
               </div>
-
             )}
           </div>
         </div>
@@ -216,15 +215,15 @@ const Navbar = (props) => {
           <button type="button" className="btn-close" data-bs-dismiss="offcanvas"></button>
         </div>
         <div className="offcanvas-body">
-          {localStorage.getItem('teacherid') &&           
-          <img className="img-fluid rounded-circle mb-3" src={!user.teacherImage ?image:user.teacherImage} alt="teacher" style={{ height: "100px", width: "100px" }} />}
-          {localStorage.getItem('studentid') &&           
-          <img className="img-fluid rounded-circle mb-3" src={!user.studentImage ?image:user.studentImage} alt="student" style={{ height: "100px", width: "100px" }} />}
+          {localStorage.getItem('teacherid') &&
+            <img className="img-fluid rounded-circle mb-3" src={!user.teacherImage ? image : user.teacherImage} alt="teacher" style={{ height: "100px", width: "100px" }} />}
+          {localStorage.getItem('studentid') &&
+            <img className="img-fluid rounded-circle mb-3" src={!user.studentImage ? image : user.studentImage} alt="student" style={{ height: "100px", width: "100px" }} />}
           <h5>{user.name}</h5>
           <p className="text-muted">{user.email}</p>
           <p className="text-muted">{user.phoneNumber}</p>
           <p className="text-muted">{user.location}</p>
-           <p className='text-muted'>{user.bio}</p>
+          <p className='text-muted'>{user.bio}</p>
           <button type="button" className="btn btn-outline-primary" onClick={handleEdit}>
             <i className="fa-solid fa-user-pen mx-2"></i>Edit profile
           </button>
@@ -247,25 +246,25 @@ const Navbar = (props) => {
                 </div>
                 {localStorage.getItem('teacherid') && <div className="mb-3">
                   <label htmlFor="bio" className="form-label">Bio</label>
-                  <input type="text" className="form-control" id="bio" value={update.bio||''} name='bio' onChange={onChange}/>
+                  <input type="text" className="form-control" id="bio" value={update.bio || ''} name='bio' onChange={onChange} />
                 </div>}
                 <div className="mb-3">
                   <label htmlFor="location" className="form-label">Location</label>
-                  <input type="text" className="form-control" id="location" value={update.location||''} name='location' onChange={onChange}/>
+                  <input type="text" className="form-control" id="location" value={update.location || ''} name='location' onChange={onChange} />
                 </div>
                 {localStorage.getItem('teacherid') && <div className="mb-3">
                   <label htmlFor="chargesPerHour" className="form-label">Charges Per Hour</label>
-                  <input type="number" className="form-control" id="chargesPerHour" value={update.chargesPerHour||''} name='chargesPerHour' onChange={onChange}/>
+                  <input type="number" className="form-control" id="chargesPerHour" value={update.chargesPerHour || ''} name='chargesPerHour' onChange={onChange} />
                 </div>}
                 <div className="mb-3">
                   <label htmlFor="phoneNumber" className="form-label">Phone Number</label>
-                  <input type="number" className="form-control" id="phoneNumber" value={update.phoneNumber||''} name='phoneNumber' onChange={onChange}/>
+                  <input type="number" className="form-control" id="phoneNumber" value={update.phoneNumber || ''} name='phoneNumber' onChange={onChange} />
                 </div>
               </form>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={handleUpdate} >Update</button>
+              <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={handleUpdate}>Update</button>
             </div>
           </div>
         </div>
